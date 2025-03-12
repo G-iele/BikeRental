@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace BikeRental.Repositories
 {
-   public class BikeRepo<T> where T: ICSVSerializable
+   public class DataRepo<T> where T: ICSVSerializable, new()
     {
         private readonly string _filePath;
 
-        public BikeRepo (string filePath)
+        public DataRepo (string filePath)
         {
             _filePath = filePath;
         }
@@ -26,6 +26,28 @@ namespace BikeRental.Repositories
                    sw.WriteLine(item.ToCsvString());
                 }
             }
+        }
+
+        public List<T> GetData()
+        {
+            if(!File.Exists(_filePath))
+            {
+                return new List<T>();
+            }
+
+            List<T> data = new List<T>();
+
+            StreamReader sr = new StreamReader(_filePath);
+
+            while (!sr.EndOfStream)
+            {
+                T item = new T();
+                item.FromCsvString(sr.ReadLine());
+                data.Add(item);
+            }
+            sr.Close();
+
+            return data;
         }
 
     }

@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace BikeRental.Contracts
 {
-    public interface IBikeRental
+    public interface IClientService
     {
-        void AddBike(Bike bike);
-        List<Bike> GetBikes();
+        void AddClient(Client client);
+        List<Client> GetClients();
+
     }
 }

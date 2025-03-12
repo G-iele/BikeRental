@@ -15,21 +15,24 @@ namespace BikeRental.Models
         protected string BreakType { get; set; }
         protected decimal RentalRate { get; set; }
 
+        protected bool IsRented { get; set; }
+
 
         public Bike()
         {
 
         }
 
-        public Bike (int id, string brand, string breakType, decimal rentalRate )
+        public virtual string ToCsvString()
         {
-            Id = id;
-            Brand = brand;
-            BreakType = breakType;
-            RentalRate = rentalRate;
+            return string.Empty;
         }
 
-        public virtual string ToCsvString()
+        public virtual void FromCsvString(string csvLine)
+        {
+        }
+
+        public virtual string ToString()
         {
             return string.Empty;
         }

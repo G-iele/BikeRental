@@ -9,5 +9,6 @@ namespace BikeRental.Contracts
     public interface ICSVSerializable
     {
         string ToCsvString();
+        void FromCsvString(string csvLine);
     }
 }
