@@ -9,8 +9,8 @@ namespace BikeRental.Models
 {
     public class Client: ICSVSerializable
     {
-        protected int Id { get; set; }
-        protected string Name { get; set; }
+        public int Id { get; protected set; }
+        public string Name { get; protected set; }
         protected List<int> BikeIds { get; set; } 
 
         public Client()
@@ -22,6 +22,16 @@ namespace BikeRental.Models
             Id = clientId;
             Name = name;
             BikeIds = bikeIds ?? new List<int>();
+        }
+
+        public void AddBikeId(int bikeId)
+        {
+            BikeIds.Add(bikeId);
+        }
+
+        public void RemoveBikeId(int bikeToRentId)
+        {
+            BikeIds.Remove(bikeToRentId);
         }
 
         public string ToCsvString()

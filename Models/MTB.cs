@@ -10,6 +10,7 @@ namespace BikeRental.Models
 {
     public class MTB: Bike
     {
+        protected string Type { get; set; }
         protected string SuspensionType { get; set; }
         protected bool DropperPost { get; set; }
         
@@ -17,9 +18,10 @@ namespace BikeRental.Models
         {
 
         }
-        public MTB (int id, string brand, string breakType, decimal rentalRate,string suspensionType, bool dropperPost)
+        public MTB (int id,string type, string brand, string breakType, decimal rentalRate,string suspensionType, bool dropperPost)
         {
             Id = id;
+            Type = type;
             Brand = brand;
             BreakType = breakType;
             RentalRate = rentalRate;
@@ -30,7 +32,7 @@ namespace BikeRental.Models
 
         public override string ToCsvString()
         {
-            return $"{Id},{Brand},{BreakType},{RentalRate},{SuspensionType},{DropperPost},{IsRented}";
+            return $"{Id},{Type},{Brand},{BreakType},{RentalRate},{SuspensionType},{DropperPost},{IsRented}";
         }
 
         public override void FromCsvString(string csvLine)
@@ -38,17 +40,18 @@ namespace BikeRental.Models
             string[] bikeValues = csvLine.Split(',');
 
             Id = int.Parse(bikeValues[0]);
-            Brand = bikeValues[1];
-            BreakType = bikeValues[2];
-            RentalRate = decimal.Parse(bikeValues[3]);
-            SuspensionType = bikeValues[4];
-            DropperPost = bool.Parse(bikeValues[5]);
-            IsRented = bool.Parse(bikeValues[6]);
+            Type = bikeValues[1];
+            Brand = bikeValues[2];
+            BreakType = bikeValues[3];
+            RentalRate = decimal.Parse(bikeValues[4]);
+            SuspensionType = bikeValues[5];
+            DropperPost = bool.Parse(bikeValues[6]);
+            IsRented = bool.Parse(bikeValues[7]);
         }
 
         public override string ToString()
         {
-            return $"Bike: {Id}, {Brand}, {BreakType}, {RentalRate}, {SuspensionType}, {DropperPost}, {IsRented}";
+            return $"Bike: {Id}, {Type}, {Brand}, {BreakType}, {RentalRate}, {SuspensionType}, {(DropperPost ? "Has" : "Does not have")} dropper post, Is rented: {IsRented}.";
         }
     }
 }

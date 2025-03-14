@@ -30,6 +30,30 @@ namespace BikeRental.Services
         {
             return Clients;
         }
-        
+
+        public Client? GetClient(int clientId)
+        {
+            return Clients.Find(c => c.Id == clientId);
+        }
+
+        public bool RentBikeToClient(int clientToRentId, int bikeToRentId)
+        {
+            Client client = GetClient(clientToRentId);
+
+            if(client is Client)
+            {
+                client.AddBikeId(bikeToRentId);
+                _dataRepo.SaveData(Clients);
+                return true;
+            } 
+            return false;
+        }
+
+        public void RenturnBikeFromClient(int clientToReturntId, int bikeToReturntId)
+        {
+            Client client = GetClient(clientToReturntId);
+            client.RemoveBikeId(bikeToReturntId);
+            _dataRepo.SaveData(Clients);
+        }
     }
 }

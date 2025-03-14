@@ -10,7 +10,9 @@ namespace BikeRental.Contracts
     public interface IClientService
     {
         void AddClient(Client client);
+        Client? GetClient(int clientId);
         List<Client> GetClients();
-
+        bool RentBikeToClient(int clientToRentId, int bikeToRentId);
+        void RenturnBikeFromClient(int clientToReturntId, int bikeToReturntId);
     }
 }

@@ -9,7 +9,12 @@ namespace BikeRental.Contracts
 {
     public interface IBikeService<T> where T : Bike
     {
+        T ReservedTempBike { get; }
         void AddBike(T bike);
         List<T> GetBikes();
+        T GetBike(int bikeToRentId);
+        bool ReserveBike(int bikeToRentId);
+        void RentBike();
+        bool ReturnBike(int bikeToReturntId);
     }
 }

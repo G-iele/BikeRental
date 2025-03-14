@@ -10,12 +10,11 @@ namespace BikeRental.Models
 {
     public class Bike: ICSVSerializable
     {
-        protected int Id { get; set; }
-        protected string Brand { get; set; }
+        public int Id { get; protected set; }
+        public string Brand { get; protected set; }
         protected string BreakType { get; set; }
         protected decimal RentalRate { get; set; }
-
-        protected bool IsRented { get; set; }
+        public bool IsRented { get; set; }
 
 
         public Bike()

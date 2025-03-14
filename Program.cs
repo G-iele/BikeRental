@@ -42,7 +42,22 @@ namespace BikeRental
                     {
                         case 1:
                             Console.WriteLine("What type of bike you want to add (1: MTB, 2: EBike): ");
-                            int bikeType = int.Parse(Console.ReadLine());
+                            int.TryParse(Console.ReadLine(), out int bikeType);
+
+                            string selectedType = string.Empty;
+
+                            switch (bikeType)
+                            {
+                                case 1:
+                                    selectedType = "MTB";
+                                    break;
+                                case 2:
+                                    selectedType = "EBike";
+                                    break;
+                                default:
+                                    Console.WriteLine("Selected type does not exist.");
+                                    continue;
+                            }
 
                             Random randBikeId = new Random();
                             int bikeId = randBikeId.Next(0, 1001);
@@ -54,39 +69,44 @@ namespace BikeRental
                             string breakType = Console.ReadLine();
 
                             Console.WriteLine("Bike rental rate: ");
-                            decimal rentalRate = decimal.Parse(Console.ReadLine());
+                            decimal.TryParse(Console.ReadLine(), out decimal rentalRate);
 
-                            if (bikeType == 1)
+                            switch (bikeType)
                             {
-                                Console.WriteLine("Bike suspension type: ");
-                                string suspensionType = Console.ReadLine();
+                                case 1:
+                                    Console.WriteLine("Bike suspension type: ");
+                                    string suspensionType = Console.ReadLine();
 
-                                Console.WriteLine("Bike dropper post (1: true, 2: false): ");
-                                int.TryParse(Console.ReadLine(), out int type);
+                                    Console.WriteLine("Bike dropper post (1: true, 2: false): ");
+                                    int.TryParse(Console.ReadLine(), out int type);
 
-                                bool dropperPost;
+                                    bool dropperPost;
 
-                                if (type == 1)
-                                {
-                                    dropperPost = true;
-                                }
-                                else
-                                {
-                                    dropperPost = false;
-                                }
+                                    if (type == 1)
+                                    {
+                                        dropperPost = true;
+                                    }
+                                    else
+                                    {
+                                        dropperPost = false;
+                                    }
 
-                                MTB bike = new MTB(bikeId, brand, breakType, rentalRate, suspensionType, dropperPost);
-                                mtbBikeService.AddBike(bike);
-                            } else if (bikeType == 2)
-                            {
-                                Console.WriteLine("Bike motor power: ");
-                                int motorPower = int.Parse(Console.ReadLine());
+                                    MTB bike = new MTB(bikeId, selectedType, brand, breakType, rentalRate, suspensionType, dropperPost);
+                                    mtbBikeService.AddBike(bike);
+                                    break;
+                                case 2:
+                                    Console.WriteLine("Bike motor power: ");
+                                    int motorPower = int.Parse(Console.ReadLine());
 
-                                Console.WriteLine("Bike battery capacity: ");
-                                int batteryCapacity = int.Parse(Console.ReadLine());
+                                    Console.WriteLine("Bike battery capacity: ");
+                                    int batteryCapacity = int.Parse(Console.ReadLine());
 
-                                EBike bike = new EBike(bikeId, brand, breakType, rentalRate, motorPower, batteryCapacity);
-                                eBikeService.AddBike(bike);
+                                    EBike ebike = new EBike(bikeId, selectedType, brand, breakType, rentalRate, motorPower, batteryCapacity);
+                                    eBikeService.AddBike(ebike);
+                                    break;
+                                default:
+                                    Console.WriteLine("Selected type does not exist.");
+                                    continue;
                             }
                                 break;
                         case 2:
@@ -101,6 +121,27 @@ namespace BikeRental
                             }
                             break;
                         case 3:
+                            Console.WriteLine("What type of bike you want to find (1: MTB, 2: EBike): ");
+                            int.TryParse(Console.ReadLine(), out int selectedBikeType);
+
+                            switch (selectedBikeType)
+                            {
+                                case 1:
+                                    foreach (MTB c in mtbBikeService.GetBikes())
+                                    {
+                                        Console.WriteLine(c.ToString());
+                                    }
+                                    break;
+                                case 2:
+                                    foreach (EBike c in eBikeService.GetBikes())
+                                    {
+                                        Console.WriteLine(c.ToString());
+                                    }
+                                    break;
+                                default:
+                                    Console.WriteLine("Selected bike type does not exist.");
+                                    continue;
+                            }
                             break;
                         case 4:
                             Random randClientId = new Random();  
@@ -119,9 +160,66 @@ namespace BikeRental
                             }
                             break;
                         case 6:
+                            Console.WriteLine("Enter bike ID that you want to rent: ");
+                            int.TryParse(Console.ReadLine(), out int bikeToRentId);
+
+                            Console.WriteLine("Enter client ID: ");
+                            int.TryParse(Console.ReadLine(), out int clientToRentId);
+
+                                if (mtbBikeService.ReserveBike(bikeToRentId))
+                                {
+                                    Bike bike = mtbBikeService.ReservedTempBike;
+                                    Client clientToRent = clientService.GetClient(clientToRentId);
+
+                                    if(clientService.RentBikeToClient(clientToRentId, bikeToRentId))
+                                    {
+                                    mtbBikeService.RentBike();
+                                    Console.WriteLine($"Bike id: {bike.Id}, brand: {bike.Brand} is rented to client name: {clientToRent.Name}, client id: {clientToRent.Id}.");
+                                    }
+
+                                }
+                                else if (eBikeService.ReserveBike(bikeToRentId)) 
+                                {
+                                    Bike bike = eBikeService.ReservedTempBike;
+                                    Client clientToRent = clientService.GetClient(clientToRentId);
+
+                                    if (clientService.RentBikeToClient(clientToRentId, bikeToRentId))
+                                    {
+                                        eBikeService.RentBike();
+                                    Console.WriteLine($"Bike id: {bike.Id}, brand: {bike.Brand} is rented to client name: {clientToRent.Name}, client id: {clientToRent.Id}.");
+                                    }
+                                } 
+                                else
+                                {
+                                    Console.WriteLine("Bike could't be rented.");
+                                }
                             break;
                         case 7:
-                            break;
+                            Console.WriteLine("Enter bike ID that you want to return: ");
+                            int.TryParse(Console.ReadLine(), out int bikeToReturnId);
+
+                            Console.WriteLine("Enter client ID: ");
+                            int.TryParse(Console.ReadLine(), out int clientToReturntId);
+
+                            if (mtbBikeService.ReturnBike(bikeToReturnId))
+                            {
+                                Bike bike = mtbBikeService.GetBike(bikeToReturnId);
+                                Client clientToRent = clientService.GetClient(clientToReturntId);
+                                clientService.RenturnBikeFromClient(clientToReturntId, bikeToReturnId);
+                                Console.WriteLine($"Bike id: {bike.Id}, brand: {bike.Brand} is returned from client name: {clientToRent.Name}, client id: {clientToRent.Id}.");
+                            }
+                            else if (eBikeService.ReturnBike(bikeToReturnId))
+                            {
+                                Bike bike = eBikeService.GetBike(bikeToReturnId);
+                                Client clientToRent = clientService.GetClient(clientToReturntId);
+                                clientService.RenturnBikeFromClient(clientToReturntId, bikeToReturnId);
+                                Console.WriteLine($"Bike id: {bike.Id}, brand: {bike.Brand} is returned from client name: {clientToRent.Name}, client id: {clientToRent.Id}.");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Bike could't be returned.");
+                            }
+                                break;
                         case 0:
                             break;
                         default:

@@ -8,6 +8,7 @@ namespace BikeRental.Models
 {
    public class EBike: Bike
     {
+        protected string Type { get; set; }
         protected int MotorPower { get; set; }
 
         protected int BatteryCapacity { get; set; }
@@ -17,9 +18,10 @@ namespace BikeRental.Models
 
         }
 
-        public EBike (int id, string brand, string breakType, decimal rentalRate, int motorPower, int batteryCapacity)
+        public EBike (int id, string type, string brand, string breakType, decimal rentalRate, int motorPower, int batteryCapacity)
         {
             Id = id;
+            Type = type;
             Brand = brand;
             BreakType = breakType;
             RentalRate = rentalRate;
@@ -30,7 +32,7 @@ namespace BikeRental.Models
 
         public override string ToCsvString()
         {
-            return $"{Id},{Brand},{BreakType},{RentalRate},{MotorPower},{BatteryCapacity},{IsRented}";
+            return $"{Id},{Type},{Brand},{BreakType},{RentalRate},{MotorPower},{BatteryCapacity},{IsRented}";
         }
 
         public override void FromCsvString(string csvLine)
@@ -38,17 +40,18 @@ namespace BikeRental.Models
             string[] bikeValues = csvLine.Split(',');
 
             Id = int.Parse(bikeValues[0]);
-            Brand = bikeValues[1];
-            BreakType = bikeValues[2];
-            RentalRate = decimal.Parse(bikeValues[3]);
-            MotorPower = int.Parse(bikeValues[4]);
-            BatteryCapacity = int.Parse(bikeValues[5]);
-            IsRented = bool.Parse(bikeValues[6]);
+            Type = bikeValues[1];
+            Brand = bikeValues[2];
+            BreakType = bikeValues[3];
+            RentalRate = decimal.Parse(bikeValues[4]);
+            MotorPower = int.Parse(bikeValues[5]);
+            BatteryCapacity = int.Parse(bikeValues[6]);
+            IsRented = bool.Parse(bikeValues[7]);
         }
 
         public override string ToString()
         {
-            return $"Bike: {Id}, {Brand}, {BreakType}, {RentalRate}, {MotorPower}, {BatteryCapacity}, {IsRented}";
+            return $"Bike: {Id}, {Type}, {Brand}, {BreakType}, {RentalRate}, {MotorPower}, {BatteryCapacity}, Is rented: {IsRented}";
         }
     }
 }
